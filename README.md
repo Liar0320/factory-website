@@ -3,7 +3,7 @@
 
 支持pc端和移动端
 
-演示地址：[https://github.com/Liar0320/factory.website](https://github.com/Liar0320/factory.website)
+演示地址：[https://liar0320.github.io/factory-website/dist/index.html](https://liar0320.github.io/factory-website/dist/index.html)
 
 ## 项目安装
 ```
