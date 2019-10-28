@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1361869_5jh3tvwrdd5.css">
+    <title>fronted.code</title>
+    <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+		<!-- <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
+    
+    <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
+
+    <% if (process.env.NODE_ENV === 'production') { %>
+
+      <% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+        <link href="<%=css%>" rel="preload" as="style">
+        <link rel="stylesheet" href="<%=css%>" as="style">
+      <% } %>
+      <% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+        <link href="<%=js%>" rel="preload" as="script">
+        <script src="<%=js%>"></script>
+      <% } %>
+        
+    <% } %>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but fronted.code doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <!-- <script src="https://unpkg.com/aos@next/dist/aos.js"></script> -->
+
+  <!-- <script>
+  
+  </script> -->
+</html>

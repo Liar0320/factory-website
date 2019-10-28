@@ -1,0 +1,43 @@
+html{
+    font-size: 14px;
+}
+
+// 关联指令fixFixedTransition修复问题
+.fixFixedTransition{
+  transform: none !important;
+  transition-duration: 0ms !important;
+  visibility: visible !important;
+}
+.aboutUs__main {
+    &__title {
+      font-size: 36px;
+      padding: 15px;
+    }
+  
+    &__h3 {
+      .el-divider__text {
+        left: 0px;
+        font-size: 24px;
+        color: #000;
+        font-weight: bold;
+      }
+    }
+    &__containt {
+      padding: 0px 50px;
+    }
+  }
+  // 修复 当父级高度为100%时无法使用该定位方式
+  .el-image__inner--center{
+    position: static;
+    top: auto;
+    left: auto;
+    -webkit-transform: none;
+    transform: none;
+    display: inline;
+  }
+  /**修复手机端显示国小*/
+  @media (max-width: 768px) {
+    .el-dialog {
+      width: 100%;
+    }
+  }
