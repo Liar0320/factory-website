@@ -1,43 +1,68 @@
-html{
-    font-size: 14px;
+html {
+  font-size: 14px;
+}
+#app {
+  font: 12px/20px Hiragino Sans GB, Microsoft Yahei, \\5fae\8f6f\96c5\9ed1,
+    SimSun, \\5b8b\4f53, Arial;
 }
 
 // 关联指令fixFixedTransition修复问题
-.fixFixedTransition{
+.fixFixedTransition {
   transform: none !important;
   transition-duration: 0ms !important;
   visibility: visible !important;
 }
 .aboutUs__main {
-    &__title {
-      font-size: 36px;
-      padding: 15px;
-    }
-  
-    &__h3 {
-      .el-divider__text {
-        left: 0px;
-        font-size: 24px;
-        color: #000;
-        font-weight: bold;
-      }
-    }
-    &__containt {
-      padding: 0px 50px;
+  &__title {
+    font-size: 36px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  &__h3 {
+    .el-divider__text {
+      left: 0px;
+      font-size: 24px;
+      color: #000;
+      font-weight: bold;
     }
   }
-  // 修复 当父级高度为100%时无法使用该定位方式
-  .el-image__inner--center{
-    position: static;
-    top: auto;
-    left: auto;
-    -webkit-transform: none;
-    transform: none;
-    display: inline;
+  &__containt {
+    padding: 0px 50px;
   }
-  /**修复手机端显示国小*/
-  @media (max-width: 768px) {
-    .el-dialog {
-      width: 100%;
-    }
+}
+// 修复 当父级高度为100%时无法使用该定位方式
+.el-image__inner--center {
+  position: static;
+  top: auto;
+  left: auto;
+  -webkit-transform: none;
+  transform: none;
+  display: inline;
+}
+/**修复手机端显示国小*/
+@media (max-width: 768px) {
+  .el-dialog {
+    width: 100%;
   }
+}
+
+h4 {
+  font-size: 18px;
+  line-height: 32px;
+}
+
+//element-ui
+// @FIXME:https://github.com/ElemeFE/element/issues/18490
+// body {
+//   overflow: auto !important;
+// }
+
+.el-image-viewer__close {
+  color: #fff;
+}
+
+// p{
+//   font-size: 16px;
+//   letter-spacing: 1px;
+// }

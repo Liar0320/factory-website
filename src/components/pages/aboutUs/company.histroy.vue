@@ -7,19 +7,25 @@
       <el-divider content-position="left" class="">发展历程</el-divider>
     </div> -->
       <!-- 时间线 -->
-      <div class="block">
+      <div class="block" v-loading="loading" style="min-height:150px">
         <lch-timeline>
           <lch-timeline-item
             class="pb15"
             :timestamp="key"
-            v-for="(value, key) in histroyListComputed"
+            v-for="(value, key) in histroyList"
             :key="key"
           >
             <el-card>
-              <p class="mb15" v-for="child in value" :key="child.$index">
-                <span class="color999">{{ child.month }}</span>
-                {{ child.content }}
-              </p>
+              <div
+                class="mb15 text-left "
+                v-for="child in value"
+                :key="child.$index"
+              >
+                <span class="color999 mr15 histroy__month">{{
+                  child.month
+                }}</span>
+                <span class="histroy__content">{{ child.content }}</span>
+              </div>
             </el-card>
           </lch-timeline-item>
         </lch-timeline>
@@ -31,35 +37,61 @@
 <script>
 // import { getHistroyList } from '../../../mocks';
 import { getCompanyHistoryInfo } from '../../apis';
-import { sortGroupByfnc } from '../../../utils';
+// import { sortGroupByfnc } from '../../../utils';
 export default {
   data: function() {
     return {
       histroyList: [],
+      loading: false,
     };
   },
-  computed: {
-    histroyListComputed() {
-      let tempList = this.histroyList.map(res => {
-        let d = new Date(res.timeStamp);
+  // computed: {
+  //   histroyListComputed() {
+  //     let tempList = this.histroyList.map(res => {
+  //       let d = new Date(res.timeStamp);
 
-        return {
-          year: d.getFullYear(),
-          month: d.getMonth() + 1,
-          content: res.content,
-        };
-      });
+  //       return {
+  //         year: d.getFullYear(),
+  //         month: d.getMonth() + 1,
+  //         content: res.content,
+  //       };
+  //     });
 
-      return sortGroupByfnc(tempList, 'year');
+  //     return sortGroupByfnc(tempList, 'year');
+  //   },
+  // },
+  mounted() {
+    this.get();
+  },
+  methods: {
+    async get() {
+      this.loading = true;
+      this.histroyList = await getCompanyHistoryInfo();
+      this.loading = false;
     },
   },
-  mounted() {
-    getCompanyHistoryInfo().then(res => (this.histroyList = res));
+  watch: {
+    '$i18n.locale'() {
+      this.get();
+    },
   },
 };
 </script>
 
 <style lang="scss">
+@import '@/assets/content/color.scss';
+.histroy__content {
+  font-size: 16px;
+  color: $Font02;
+}
+
+.histroy__month {
+  font-size: 14px;
+}
+
+.mr15 {
+  margin-right: 15px;
+}
 // .company__histroy {
 // }
 </style>

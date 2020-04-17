@@ -6,11 +6,14 @@
       <el-row :gutter="15">
         <el-col :xs="8" :sm="6" :md="4">
           <!-- 产品的分类 -->
-          <products-nav></products-nav>
+          <products-nav @setNav="setNav"></products-nav>
         </el-col>
         <el-col :xs="16" :sm="18" :md="20">
           <!-- 产品展示 主体 -->
-          <products-show :filter-text="filter"></products-show>
+          <products-show
+            :filter-text="filter"
+            :node-type="nodeType"
+          ></products-show>
         </el-col>
       </el-row>
     </div>
@@ -27,10 +30,17 @@ export default {
   data() {
     return {
       filter: '',
+      nodeType: null,
     };
   },
   mounted() {
     this.filter = this.$route.query.filter || '';
+  },
+  methods: {
+    setNav(nodeType) {
+      // console.log(nodeType);
+      this.nodeType = nodeType;
+    },
   },
   watch: {
     $route() {
@@ -43,6 +53,7 @@ export default {
 @import 'assets/content/color.scss';
 
 .products {
+  min-height: 450px;
   &__common__title {
     position: relative;
     padding-left: 15px;

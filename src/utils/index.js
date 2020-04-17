@@ -2,9 +2,10 @@
  * @Author: liar
  * @Date: 2018-09-10 16:37:09
  * @Last Modified by: lich
- * @Last Modified time: 2019-09-23 16:56:44
+ * @Last Modified time: 2020-04-17 18:01:57
  */
-const cloneDeep = require('lodash/cloneDeep');
+// const cloneDeep = require('lodash/cloneDeep');
+const cloneDeep = item => JSON.parse(JSON.stringify(item));
 
 export function setCookie(name, value, expireDays) {
   var exdate = new Date();
@@ -189,4 +190,41 @@ export function param2Obj(url) {
         .replace(/\+/g, ' ') +
       '"}',
   );
+}
+
+/**
+ * json格式转树状结构
+ * @param   {json}      json数据
+ * @param   {String}    id的字符串
+ * @param   {String}    父id的字符串
+ * @param   {String}    children的字符串
+ * @return  {Array}     数组
+ */
+// eslint-disable-next-line max-params
+export function transDataIdPid(a, idStr, pidStr, chindrenStr) {
+  var r = [];
+  var hash = {};
+  var id = idStr;
+  var pid = pidStr;
+  var children = chindrenStr;
+  var i = 0;
+  var j = 0;
+  var len = a.length;
+
+  for (; i < len; i++) {
+    hash[a[i][id]] = a[i];
+  }
+  for (; j < len; j++) {
+    var aVal = a[j];
+    var hashVP = hash[aVal[pid]];
+
+    if (hashVP) {
+      !hashVP[children] && (hashVP[children] = []);
+      hashVP[children].push(aVal);
+    } else {
+      r.push(aVal);
+    }
+  }
+
+  return r;
 }

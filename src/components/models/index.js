@@ -21,6 +21,8 @@ export class CompnayInfo {
     lat: '',
     lng: '',
   };
+  /**地图搜索关键字 */
+  keyWords = '';
 }
 
 /**公司历史 */

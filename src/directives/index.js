@@ -11,7 +11,8 @@
 // import loading from '@/components/common/loading';
 import lchTimeline from './components/timeItem/main';
 import lchTimelineItem from './components/timeItem/timeitem';
-import multipleLangeInput from './components/multipleLangeInput';
+import imagePlacehold from './components/image.placehold.vue';
+// import multipleLangeInput from './components/multipleLangeInput';
 // import multipleLangeInput from './components/multipleLangeInput/index';
 // import elements from 'aos/src/js/helpers/elements';
 
@@ -24,7 +25,8 @@ export const utilsComponent = {
   install(Vue, options) {
     Vue.component('lchTimeline', lchTimeline);
     Vue.component('lchTimelineItem', lchTimelineItem);
-    Vue.component('multipleLangeInput', multipleLangeInput);
+    Vue.component('imagePlacehold', imagePlacehold);
+    // Vue.component('multipleLangeInput', multipleLangeInput);
 
     // Vue.component('Loading', loading);
     // Vue.component('multipleLangeInput', multipleLangeInput);
@@ -163,7 +165,6 @@ export const utilsDec = {
         el.setAttribute('ondragstart', 'return false;');
 
         eventSystem.on('mousemovedone', function(offset) {
-          console.log(offset);
           vNode.context[vNodeDirective.expression](offset);
         });
       },
@@ -171,6 +172,53 @@ export const utilsDec = {
         // console.log('unbind');
       },
     });
+    Vue.directive('scrollInContainer', {
+      inserted(el, vNodeDirective, vNode) {
+        el.$$handleScroll = () => {
+          let isInContainer =
+            el.offsetTop - document.documentElement.scrollTop <
+            document.documentElement.clientHeight;
+
+          if (isInContainer) {
+            vNode.context.$set(vNode.context, vNodeDirective.expression, true);
+            window.removeEventListener('scroll', el.$$handleScroll);
+          }
+        };
+
+        window.addEventListener('scroll', el.$$handleScroll);
+      },
+      unbind(el) {
+        window.removeEventListener('scroll', el.$$handleScroll);
+        el.$$handleScroll = null;
+      },
+    });
+    // Vue.directive('lichLazy', {
+    //   bind(el, vNodeDirective, vNode) {
+    //     let src = vNode.componentInstance.src;
+
+    //     // vNode.componentInstances.src = '';
+    //     // vNode.componentInstance.$set(vNode.componentInstance, 'loading', '');
+
+    //     let container = vNode.context[vNodeDirective.expression];
+
+    //     el.$$handleScroll = () => {
+    //       let isInContainer =
+    //         container.offsetTop - document.documentElement.scrollTop <
+    //         container.clientHeight;
+
+    //       if (isInContainer) {
+    //         vNode.componentInstance.$set(vNode.componentInstance, 'src', src);
+    //         window.removeEventListener('scroll', el.$$handleScroll);
+    //       }
+    //     };
+
+    //     window.addEventListener('scroll', el.$$handleScroll);
+    //   },
+    //   unbind(el) {
+    //     window.removeEventListener('scroll', el.$$handleScroll);
+    //     el.$$handleScroll = null;
+    //   },
+    // });
     /** 绑定点击路由跳转的指令*/
     // Vue.directive('lichRouterGo', {
     //   inserted(el) {

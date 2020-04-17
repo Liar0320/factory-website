@@ -1,8 +1,8 @@
 <template>
   <div data-aos="slide-left" v-polyfills-aos>
-    <div class="container p15">
+    <div class="container p15" v-loading="loading" style="min-height:150px">
       <!-- 标题 -->
-      <h3 class="aboutUs__main__title">{{ $t('navMain.menus.email') }}</h3>
+      <h3 class="aboutUs__main__title mb15">{{ $t('navMain.menus.email') }}</h3>
       <!-- 表单组件 name company phone email message -->
       <el-form
         ref="concatForm"
@@ -47,7 +47,8 @@
 <script>
 import { Concat } from '../../models';
 import { setFeedback } from '../../apis';
-const clone = require('lodash/cloneDeep');
+// const clone = require('lodash/cloneDeep');
+// const clone = item => JSON.parse(JSON.stringify(item));
 
 export default {
   data() {
@@ -55,7 +56,7 @@ export default {
       if (!value) {
         return callback(new Error('手机号不能为空'));
       }
-      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+      const reg = new RegExp(/^\d{1,17}$/) || /^1[3|4|5|7|8][0-9]\d{8}$/;
 
       if (reg.test(value)) {
         callback();
@@ -106,11 +107,11 @@ export default {
           },
         ],
       },
+      loading: false,
     };
   },
   mounted() {
-    console.log(this);
-    this.formMap = clone(Concat);
+    this.formMap = {} || new Concat();
   },
   methods: {
     getMessage(cszd, suffix) {
@@ -119,11 +120,39 @@ export default {
       return this.$t(cszd) + suffix;
     },
     onSubmit(formName) {
+      var that = this;
+
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(valid);
-          setFeedback(this.formMap);
+          this.loading = true;
+
+          setFeedback(this.formMap)
+            .then(function() {
+              // that.$message({
+              //   message: that.$t('msg.success'),
+              //   type: 'success',
+              // });
+              that.$alert(that.$t('msg.success'), '', {
+                confirmButtonText: that.$t('btn.ok'),
+                // cancelButtonText: '取消',
+                type: 'success',
+              });
+
+              that.loading = false;
+            })
+            .catch(function() {
+              that.$alert(that.$t('msg.error'), '', {
+                confirmButtonText: that.$t('btn.ok'),
+                // cancelButtonText: '取消',
+                type: 'error',
+              });
+              that.loading = false;
+            });
         } else {
+          // that.$message({
+          //   message: that.$t('msg.error'),
+          //   type: 'error',
+          // });
           console.log('error submit!!');
 
           return false;

@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
+dist
 dist/assets/**/*.gz
 dist/assets/**/*.map
+
+package-lock.json
 
 # local env files
 .env.local

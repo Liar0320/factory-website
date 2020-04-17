@@ -19,7 +19,7 @@
     </template>
     <!-- ACTIONS -->
     <!-- CANVAS -->
-    <div class="modal__canvas">
+    <div class="modal__canvas" v-if="currentProduct">
       <el-row :gutter="15">
         <el-col :span="24" class="mb15">
           <el-image
@@ -95,8 +95,8 @@ export default {
       },
     },
     selectedId: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 0,
     },
   },
 

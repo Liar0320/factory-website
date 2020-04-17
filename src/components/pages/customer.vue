@@ -4,34 +4,48 @@
       <!-- 标题 -->
       <h4 class="aboutUs__main__title">{{ $t('navMain.menus.customer') }}</h4>
       <!-- 图片展示 在 pc端 以4分 在移动端 2分 -->
-      <el-row :gutter="25">
-        <el-col
-          :sm="6"
-          :xs="12"
-          v-for="image in customerList"
-          :key="image.$index"
-          class="mb25"
-        >
-          <el-image
-            style="width: 100%; height: 100%"
-            :src="image"
-            :preview-src-list="customerList"
-            :title="$t('header.imgTitle')"
-            v-fix-fixed-transition
+      <div v-loading="loading" style="min-height:150px">
+        <el-row :gutter="25">
+          <el-col
+            :sm="6"
+            :xs="12"
+            v-for="item in customerList"
+            :key="item.id"
+            class="mb25"
           >
-          </el-image>
-        </el-col>
-      </el-row>
+            <el-image
+              style="width: 100%; height: 100%"
+              :src="item.img"
+              :preview-src-list="imgs"
+              :title="item.name"
+              v-fix-fixed-transition
+            >
+              <image-placehold slot="placeholder" />
+            </el-image>
+          </el-col>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import companynews from 'assets/images/companynews.jpg';
+// import companynews from 'assets/images/companynews.jpg';
+import { getCustomer } from '../apis';
 export default {
   data() {
     return {
-      customerList: new Array(8).fill(companynews),
+      customerList: [],
+      imgs: [],
+      loading: false,
     };
+  },
+  mounted() {
+    this.loading = true;
+    getCustomer().then(_ => {
+      this.loading = false;
+      this.customerList = _;
+      this.imgs = _.map(item => item.img);
+    });
   },
   // watch(){
   //   this.$refs.elImage.showViewer

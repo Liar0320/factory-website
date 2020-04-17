@@ -1,8 +1,12 @@
 <template>
   <div data-aos="zoom-in" v-polyfills-aos>
     <div class="container faqs tbGap">
-      <h4 class="aboutUs__main__title">{{ $t('navMain.menus.faq') }}</h4>
-      <el-collapse v-model="activeNames">
+      <h4 class="aboutUs__main__title mb15">{{ $t('navMain.menus.faq') }}</h4>
+      <el-collapse
+        v-model="activeNames"
+        v-loading="loading"
+        style="min-height:150px"
+      >
         <el-collapse-item
           :title="item.question"
           :name="item.id"
@@ -25,11 +29,26 @@ export default {
     return {
       activeNames: [63],
       faqQuestionList: null,
+      loading: false,
     };
   },
-  async mounted() {
-    this.faqQuestionList = await getFaqQuestionList();
-    this.activeNames.push(this.faqQuestionList[0].id);
+  mounted() {
+    this.get();
+  },
+  methods: {
+    async get() {
+      this.loading = true;
+      this.faqQuestionList = await getFaqQuestionList();
+      if (this.faqQuestionList[0]) {
+        this.activeNames.push(this.faqQuestionList[0].id);
+        this.loading = false;
+      }
+    },
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.get();
+    },
   },
 };
 </script>

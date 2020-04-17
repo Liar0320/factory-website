@@ -2,6 +2,8 @@ export default {
   lang: 'English',
   tools: {
     placeholder: 'Please enter keywords',
+    toggleLang: 'Switching language',
+    all: 'All',
   },
   header: {
     imgTitle: 'images',
@@ -28,7 +30,7 @@ export default {
     name: "Jia Shanming's Accessories",
     phone: 'phone',
     fax: 'fax',
-    mobliePhone: 'mobliePhone',
+    mobilePhone: 'mobilePhone',
     concatUser: 'concatUser',
     email: 'email',
     address: 'address',
@@ -57,6 +59,7 @@ export default {
   newsInfo: {
     detial: 'News Detial',
     releaseTime: 'ReleaseTime',
+    readings: 'Reading',
   },
   validInfo: {
     empty: ' is necessary',
@@ -83,5 +86,15 @@ export default {
   common: {
     more: 'More Info',
     goBack: 'Go Back',
+    consultTel: 'Telephone consultation',
+    backTop: 'To top',
+  },
+  msg: {
+    success: 'Thank you for your consultation, please wait for our contact!',
+    error:
+      'The request failed. Please try again. If not, please call us and wait for our repair. Sorry',
+  },
+  btn: {
+    ok: 'ok',
   },
 };

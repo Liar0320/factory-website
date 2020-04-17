@@ -11,7 +11,7 @@ const TYPELANG = {
   中: 'zh-CN',
 };
 /**初始化语言 */
-const initLang = '中';
+const initLang = 'EN';
 // const messages = {
 //   'en-US': Object.assign(en, enLocaleElement),
 //   'zh-CN': Object.assign(zh, zhLocaleElement),
@@ -39,48 +39,58 @@ export default function(Vue) {
   Vue.use(VueI18n);
   const i18n = new VueI18n(config);
 
-  function langChange(lang) {
-    /**所有的语言值 */
-    const langes = Object.values(TYPELANG);
+  // function langChange(lang) {
+  //   /**所有的语言值 */
+  //   const langes = Object.values(TYPELANG);
 
-    if (typeof lang === 'undefined') {
-      const length = langes.length - 1;
+  //   if (typeof lang === 'undefined') {
+  //     const length = langes.length - 1;
 
-      let index = langes.indexOf(i18n.locale);
+  //     let index = langes.indexOf(i18n.locale);
 
-      if (index >= length) {
-        index = 0;
-      } else {
-        index++;
-      }
-      lang = langes[index];
-    }
+  //     if (index >= length) {
+  //       index = 0;
+  //     } else {
+  //       index++;
+  //     }
+  //     lang = langes[index];
+  //   }
 
-    i18n.locale = lang;
+  //   i18n.locale = lang;
 
-    // setCookie('i18n', lang);
-    localStorage.setItem('i18n', lang);
+  //   // setCookie('i18n', lang);
+  //   localStorage.setItem('i18n', lang);
 
-    return Object.keys(TYPELANG)[langes.indexOf(lang)];
-  }
+  //   return Object.keys(TYPELANG)[langes.indexOf(lang)];
+  // }
 
-  /** @TODO:语言切换 监听I18n如果改变则全局改变 */
-  Vue.directive('langeChange', {
-    /**
-     * @param {HTMLElement} el
-     * @param { import('vue').VNodeDirective } binding
-     * @param { import('vue').VNode } Vnode
-     */
-    bind(el, binding, Vnode) {
-      Vnode.context[binding.expression] = langChange(config.locale);
-      el.addEventListener('click', function() {
-        Vnode.context[binding.expression] = langChange();
-      });
-    },
-    unbind(el) {
-      el.removeEventListener('click');
-    },
-  });
+  // /** @TODO:语言切换 监听I18n如果改变则全局改变 */
+  // Vue.directive('langeChange', {
+  //   /**
+  //    * @param {HTMLElement} el
+  //    * @param { import('vue').VNodeDirective } binding
+  //    * @param { import('vue').VNode } Vnode
+  //    */
+  //   bind(el, binding, Vnode) {
+  //     Vnode.context[binding.expression] = langChange(config.locale);
+  //     el.addEventListener('click', function() {
+  //       if (el.attributes.getNamedItem('hock')) {
+  //         let hock = el.attributes.getNamedItem('hock').value;
+
+  //         Vnode.context[hock]().then(function() {
+  //           Vnode.context[binding.expression] = langChange();
+  //         });
+  //       } else {
+  //         Vnode.context[binding.expression] = langChange();
+  //       }
+
+  //       // location.reload();
+  //     });
+  //   },
+  //   unbind(el) {
+  //     el.removeEventListener('click');
+  //   },
+  // });
 
   return i18n;
 }

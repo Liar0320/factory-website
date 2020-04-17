@@ -15,7 +15,7 @@
       </div>
     </h3>
     <!-- 主要内容产品 -->
-    <div>
+    <div v-loading="loading" style="min-height:150px">
       <el-row :gutter="25">
         <el-col class=" hidden-sm-and-up mb25" :xs="24" :sm="12" :md="6">
           <div class="products__show__filter fr wd ">
@@ -46,21 +46,23 @@
             v-fix-fixed-transition="productsDetial.dialogVisible"
           >
           </el-image>
-          <p class="products__show__item__txt">{{ item.name }}</p>
+          <p class="products__show__item__txt">{{ item.model }}</p>
         </el-col>
       </el-row>
     </div>
     <!-- 分页 -->
     <div class="overhidden">
       <el-pagination
+        :hide-on-single-page="true"
         :small="pagination.small"
         background
-        :page-size="pagination.pageSize"
-        :current-page="pagination.currentPage"
+        :page-size.sync="pagination.pageSize"
+        :current-page.sync="pagination.currentPage"
         @current-change="onPaginationChange"
-        layout=" prev, pager, next"
+        @size-change="onPaginationChange"
+        :layout="pagination.layout"
         :total="pagination.total"
-        :pager-count="pagination.pagerCount"
+        :page-sizes="[8, 16, 24]"
       >
       </el-pagination>
     </div>
@@ -87,33 +89,70 @@ export default {
   // components: { productsDetial },
   props: {
     filterText: null,
+    nodeType: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
       productsList: [],
       filter: '',
+      prevNodeType: null,
+      loading: false,
     };
   },
   mounted() {
     this.pagination.pageSize = 8;
     /**如果不是pc则采用small布局 */
     this.pagination.small = !systemInfo.IsPC;
-    this.onPaginationChange(1);
+
+    this.onPaginationChange();
   },
   methods: {
-    async onPaginationChange(val) {
-      if (typeof val === 'number') {
-        this.pagination.currentPage = val;
+    async onPaginationChange() {
+      if (!this.nodeType) {
+        return;
       }
-      this.productsList = (await getProductList(
-        Object.assign(this.pagination, { filterText: this.filter }),
-      )).list;
+      this.loading = true;
+      let res = await getProductList(
+        Object.assign(
+          {},
+          {
+            page: this.pagination.currentPage,
+            pageSize: this.pagination.pageSize,
+          },
+          { type: this.nodeType, model: this.filter },
+        ),
+      );
+
+      this.loading = false;
+      this.productsList = res.data;
+      this.pagination.total = res.total;
     },
   },
   watch: {
     filterText() {
       this.filter = this.filterText;
       this.onPaginationChange();
+    },
+    // filterText() {
+    //   this.filter = this.filterText;
+    //   this.onPaginationChange();
+    // },
+    nodeType() {
+      if (this.prevNodeType !== null) {
+        this.filter = '';
+      }
+      this.pagination.currentPage = 1;
+      this.prevNodeType = this.nodeType;
+      this.onPaginationChange();
+    },
+    // destroyed() {
+    //   this.prevNodeType = null;
+    // },
+    '$i18n.locale'() {
+      this.onPaginationChange(true);
     },
   },
 };

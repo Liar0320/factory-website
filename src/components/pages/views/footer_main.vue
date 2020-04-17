@@ -97,7 +97,12 @@ export default {
     margin-bottom: 0;
   }
   .companyinfo__label {
-    color: $Font03;
+    color: $Font03 !important;
+  }
+}
+.footer_main__menu {
+  a {
+    color: $Font04;
   }
 }
 .footer_main__menu__item {

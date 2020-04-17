@@ -1,23 +1,43 @@
 import Axios from 'axios';
-/**@type { import('node_modules/_axios@0.19.0@axios/index').AxiosStatic} axios */
+import Cache from '@/utils/cache';
+/**@type { import('node_modules/@types/axios/node_modules/axios/index').AxiosStatic} axios */
 const axios = Axios.create();
 
-const defaultUrl = '/api';
-// axios.defaults.baseURL = 'http://106.12.19.27:8000/';
+// const defaultUrl = '/api';
 // axios.defaults.baseURL = 'http://rz.talkingcake.cn/api'
 // 请求拦截器
 
+export const cache = new Cache();
+
+// cache.isLocal = true;
+
+/**@type {import("axios/node_modules/axios/index").CancelTokenStatic} */
+const CancelToken = Axios.CancelToken;
+
+function createKey(config) {
+  var params = config.params ? JSON.stringify(config.params) : '';
+  var language = config.headers.language;
+
+  return config.url + params + language;
+}
+
 axios.interceptors.request.use(
   config => {
-    // 如果有token 那么我们要带上token请求
-    // if (localStorage.accessToken) {
-    //   config.headers.accessToken = localStorage.accessToken;
-    // }
     /**如果有i18n设置语言 */
     if (localStorage.i18n) {
       config.headers.language = { 'zh-CN': 'cn', 'en-US': 'en' }[
         localStorage.i18n
       ];
+    }
+    if (config.cache) {
+      let source = CancelToken.source();
+
+      config.cancelToken = source.token;
+      let data = cache.get(createKey(config), undefined);
+
+      if (data !== null) {
+        source.cancel(data);
+      }
     }
 
     return config;
@@ -28,18 +48,25 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
   response => {
-    if (response.config.url.match(new RegExp(String('^' + defaultUrl)))) {
-      if (response.data.code !== 1) {
-        // 提示错误的loading
-        return response.data.msg;
-      }
-
-      return response.data.data;
+    if (response.data.code !== 1) {
+      // 提示错误的loading
+      return response.data.msg;
+    }
+    // 只缓存get请求
+    if (response.config.method === 'get' && response.config.cache) {
+      // 缓存数据 并将当前时间存入 方便之后判断是否过期
+      cache.set(createKey(response.config), response.data.data);
     }
 
-    return response.data;
+    return response.data.data;
   },
   error => {
+    // 请求拦截器中的source.cancel会将内容发送到error中
+    // 通过axios.isCancel(error)来判断是否返回有数据 有的话直接返回给用户
+    if (Axios.isCancel(error)) {
+      return Promise.resolve(error.message);
+    }
+
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
@@ -82,6 +109,8 @@ axios.interceptors.response.use(
     } else {
       console.log(`连接错误${error.response.status}`);
     }
+
+    return Promise.reject('');
   },
 );
 
@@ -99,33 +128,7 @@ export default {
 
     return await axios.post(path, data, config);
   },
-  get: async (path, params = {}) => {
-    return await axios.get(path, { params });
+  get: async (path, params = {}, cache = false) => {
+    return await axios.get(path, { params, cache: cache });
   },
 };
-
-// /* eslint-disable */
-// export const $post = async (path, data = {}) => await axios.post(path, data);
-
-// // axios.get 请求
-
-// /* eslint-disable */
-// export const $get = async (path, params = {}) => await axios.get(path, {params});
-// /*  */
-// export const $posts = async (path, data = {}) => await axios.post(path, data,{
-//   headers: {
-//      'content-type': 'application/x-www-form-urlencoded'
-//   }
-// });
-/**
- *
- *  当然你也可以用 Promise
- *  export const $get = (path, params = {}) => {
- *      new Promise((resolve, reject) => {
- *          axios.get(path, params)
- *            .then(res => resolve(res))
- *            .catch(err => reject(err))
- *      })
- *  }
- *
- */

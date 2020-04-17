@@ -1,12 +1,12 @@
 <template>
-  <div class="box-card companyinfo">
+  <div class="box-card companyinfo" v-loading="loading">
     <!-- 公司logo -->
     <div slot="header" class="text-left mb15 companyinfo__image">
       <img
         style="max-width:550px"
         :src="companyInfo.logo || ''"
-        width="100%"
-        height="100%"
+        width="305"
+        height="50"
         alt=""
         :title="$t('header.imgTitle')"
       />
@@ -33,12 +33,11 @@ export default {
   data() {
     return {
       companyInfo: {},
+      loading: false,
     };
   },
   mounted() {
-    getCompanyInfo().then((res = {}) => {
-      this.companyInfo = res;
-    });
+    this.get();
   },
   computed: {
     companyInfoComputed() {
@@ -46,7 +45,7 @@ export default {
       const companyInfo = {
         phone: '',
         fax: '',
-        mobliePhone: '',
+        mobilePhone: '',
         concatUser: '',
         email: '',
         address: '',
@@ -64,6 +63,20 @@ export default {
       return companyInfo;
       // let companyInfo = Object.
       // this.companyInfo;
+    },
+  },
+  methods: {
+    get() {
+      this.loading = true;
+      getCompanyInfo().then((res = {}) => {
+        this.loading = false;
+        this.companyInfo = res;
+      });
+    },
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.get();
     },
   },
 };

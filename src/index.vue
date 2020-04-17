@@ -6,7 +6,7 @@
 
 <script>
 // import { fixARoute } from './utils/vue.utils';
-import { test } from './components/apis';
+// import { test } from './components/apis';
 /**测试语法 */
 // async function sda() {
 //   return new Promise(resolve => {
@@ -19,9 +19,9 @@ export default {
   name: 'app',
   mounted() {
     // fixARoute.call(this);
-    test().then(res => {
-      console.log(res);
-    });
+    // test().then(res => {
+    //   console.log(res);
+    // });
 
     function checkIE() {
       return (

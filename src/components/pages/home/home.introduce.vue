@@ -19,12 +19,17 @@
         商信诺人寿的使命是帮助我们的客户更健康，更幸福，更有保障！
       </p>
       <!-- 商标 -->
-      <el-image
-        :src.sync="companyLogo"
+      <img
+        :src="companyLogo"
         class="mb5 companyLogo mb15"
-        style="width:60%"
-        lazy
-      ></el-image>
+        alt=""
+        style="width:400px"
+      />
+      <!-- <el-image
+        :src=""
+      
+       
+      ></el-image> -->
       <!-- 了解更多 -->
       <div>
         <el-link type="primary" class="fs16" href="/#/app/aboutUs/index">{{
@@ -36,19 +41,19 @@
 </template>
 
 <script>
-import companynews from 'assets/images/companynews.jpg';
-// import { getCompnayInfo } from '../../services/comany';
 import { getCompanyInfo } from '../../apis';
 export default {
   data() {
     return {
-      companyLogo: companynews,
+      companyLogo: null,
     };
   },
-  mounted() {
-    getCompanyInfo().then(res => {
-      this.companyLogo = res.logo;
-    });
+  async mounted() {
+    let companyInfo = await getCompanyInfo();
+
+    if (companyInfo) {
+      this.companyLogo = companyInfo.logo;
+    }
   },
 };
 </script>

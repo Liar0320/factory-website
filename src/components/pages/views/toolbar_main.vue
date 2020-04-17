@@ -17,7 +17,12 @@
         <span class="toolbar_main__cricle toolbar_main__phone">
           <div>
             <i class="el-icon-phone fs36 toolbar_main_icon mr5"></i>
-            <a class="fs26 colorFFF" href="tel:13750832836">13750832836</a>
+            <a
+              class="fs26 colorFFF"
+              :href="'tel:' + concat"
+              style="display: inline-block;min-width:228px"
+              >{{ concat }}</a
+            >
           </div>
         </span>
       </dd>
@@ -27,7 +32,7 @@
       <dd
         :title="$t('toolbar.langTitle')"
         class="mb1 toolbar_main__item"
-        v-lange-change="langText"
+        @click="langChange"
       >
         <span class="toolbar_main__cricle fs26 toolbar_main__translate">
           {{ langText }}
@@ -38,14 +43,50 @@
 </template>
 <script>
 // import langeChange from 'pages/smallComponent/langeChange.vue';
+import { getCompanyInfo } from '../../apis';
 export default {
   components: {
     // langeChange,
   },
   data() {
     return {
-      langText: '',
+      langText: this.translate(),
+      concat: '+86-13666737359',
     };
+  },
+  mounted() {
+    getCompanyInfo().then(res => {
+      this.concat = res.mobilePhone || '+86-13666737359';
+    });
+  },
+  methods: {
+    translate() {
+      return {
+        'en-US': 'EN',
+        'zh-CN': '中',
+      }[this.$i18n.locale];
+    },
+    langChange() {
+      let loading = this.$loading({
+        text: this.$t('tools.toggleLang'),
+      });
+
+      setTimeout(() => {
+        if (this.$i18n.locale === 'en-US') {
+          this.$i18n.locale = 'zh-CN';
+        } else {
+          this.$i18n.locale = 'en-US';
+        }
+        localStorage.setItem('i18n', this.$i18n.locale);
+        loading.close();
+        loading.$destroy();
+      }, 500);
+    },
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.langText = this.translate();
+    },
   },
 };
 </script>
@@ -74,9 +115,9 @@ export default {
       color: #fff;
       &.toolbar_main__phone {
         > div {
-          width: 225px;
+          width: 295px;
         }
-        width: 225px;
+        width: 295px;
       }
     }
   }
@@ -92,7 +133,7 @@ export default {
     overflow: hidden;
 
     > div {
-      width: 215px;
+      width: 285px;
     }
     transition: width 0.25s ease-in;
   }

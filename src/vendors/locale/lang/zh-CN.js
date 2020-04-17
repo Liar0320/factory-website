@@ -2,6 +2,8 @@ export default {
   lang: '中文',
   tools: {
     placeholder: '请输入关键字',
+    toggleLang: '正在切换语言',
+    all: '全部',
   },
   header: {
     imgTitle: '图片',
@@ -28,7 +30,7 @@ export default {
     name: '嘉善明其服饰辅料',
     phone: '电话',
     fax: '传真',
-    mobliePhone: '手机号',
+    mobilePhone: '手机号',
     concatUser: '联系人',
     email: '邮箱',
     address: '地址',
@@ -40,6 +42,7 @@ export default {
   newsInfo: {
     detial: '新闻详情',
     releaseTime: '发布时间',
+    readings: '阅读量',
   },
   concat: {
     name: '姓名',
@@ -81,5 +84,14 @@ export default {
   common: {
     more: '了解更多',
     goBack: '返回',
+    consultTel: '咨询电话',
+    backTop: '移动顶部',
+  },
+  msg: {
+    success: '谢谢你的咨询，请等待我们的联系!',
+    error: '请求失败，请重试，如果不行请电话咨询，等待我们的修复，抱歉',
+  },
+  btn: {
+    ok: 'ok',
   },
 };

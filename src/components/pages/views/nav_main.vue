@@ -139,7 +139,7 @@ export default {
   line-height: 60px;
   background: #1048a0;
   position: relative;
-  z-index: 3;
+  // z-index: 3;
 }
 .el-drawer {
   background-color: #1048a0;

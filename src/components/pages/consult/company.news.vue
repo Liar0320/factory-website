@@ -1,8 +1,12 @@
 <template>
   <div data-aos="slide-right" v-polyfills-aos>
-    <div class="container p15 companyNews">
+    <div
+      class="container p15 companyNews"
+      v-loading="loading"
+      style="min-height:150px"
+    >
       <!-- 标题 -->
-      <h3 class="aboutUs__main__title">{{ $t('navMain.menus.news') }}</h3>
+      <h3 class="aboutUs__main__title mb15">{{ $t('navMain.menus.news') }}</h3>
       <!-- 新闻卡片 -->
       <el-card
         shadow="hover"
@@ -14,19 +18,29 @@
           <el-col :md="4">
             <el-image
               style="width: 100%; height: 100%"
-              :src="item.images"
-              :preview-src-list="[item.images]"
-              :title="$t('header.imgTitle')"
+              :src="item.img"
+              :preview-src-list="[item.img]"
+              :title="item.title"
               v-fix-fixed-transition
-            ></el-image>
+            >
+              <image-placehold slot="placeholder" />
+            </el-image>
           </el-col>
           <el-col :md="20">
             <div @click="routerGo(item.id)" class="cursor">
-              <h4>
+              <h4 class="mb5">
                 {{ item.title }}
               </h4>
-              <p class="color999">
-                {{ item.content }}
+              <p class="color999 text-left text-indent news__summary">
+                {{ item.summary }}
+              </p>
+              <p class="news__tools">
+                <span class="news__tools__block text-left">
+                  {{ $t('newsInfo.releaseTime') }}：{{ item.formattime }}</span
+                >
+                <span class="news__tools__block text-right">
+                  {{ $t('newsInfo.readings') }}：{{ item.readings }}</span
+                >
               </p>
             </div>
           </el-col>
@@ -36,14 +50,16 @@
       <!-- 分页 -->
       <div class="overhidden">
         <el-pagination
+          :hide-on-single-page="false"
           :small="pagination.small"
           background
-          :page-size="pagination.pageSize"
-          :current-page="pagination.currentPage"
+          :page-size.sync="pagination.pageSize"
+          :current-page.sync="pagination.currentPage"
           @current-change="onPaginationChange"
-          layout=" prev, pager, next"
+          @size-change="onPaginationChange"
+          :layout="pagination.layout"
           :total="pagination.total"
-          :pager-count="pagination.pagerCount"
+          :page-sizes="[10, 20, 40]"
         >
         </el-pagination>
       </div>
@@ -60,26 +76,53 @@ export default {
   data() {
     return {
       newsInfo: [],
+      loading: false,
     };
   },
   mounted() {
-    this.pagination.pageSize = 6;
     /**如果不是pc则采用small布局 */
     this.pagination.small = !systemInfo.IsPC;
-    this.onPaginationChange(1);
+    this.onPaginationChange();
     // getNewsInfo(this.pagination).then(res => {
     //   this.newsInfo = res;
     // });
   },
   methods: {
-    async onPaginationChange(val) {
-      this.pagination.currentPage = val;
-      this.newsInfo = (await getNewsInfoList(this.pagination)).list;
+    async onPaginationChange() {
+      this.loading = true;
+      var res = await getNewsInfoList(this.pagination);
+
+      this.loading = false;
+      this.newsInfo = res.data;
+      this.pagination.total = res.total;
+    },
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.onPaginationChange();
     },
   },
 };
 </script>
 <style lang="scss">
+@import '@/assets/content/color.scss';
+.news__summary {
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: $Font02;
+}
+.text-indent {
+  text-indent: 2em;
+}
+.news__tools {
+  width: 100%;
+  display: table;
+  color: $Font03;
+  margin-top: 15px;
+}
+.news__tools__block {
+  display: table-cell;
+}
 // .companyNews {
 //   @media (min-width: 400px) {
 //     .el-pagination {

@@ -6,7 +6,8 @@
     <!-- 页头结束 -->
     <!-- 导航栏 -->
     <!-- <div class="nav_main"></div> -->
-    <lc-nav data-aos="slide-right" v-polyfills-aos></lc-nav>
+    <lc-nav v-if="isApp"></lc-nav>
+    <lc-nav v-else data-aos="slide-right" v-polyfills-aos></lc-nav>
     <!-- 导航栏结束 -->
     <!-- 轮播图 -->
     <!-- <div class="banner_main"></div> -->
@@ -41,13 +42,16 @@ import toolBar from 'pages/views/toolbar_main.vue';
 import footerMain from 'pages/views/footer_main.vue';
 import copyrightMain from 'pages/views/copyright_main.vue';
 import bannerMain from 'pages/views/banner_main.vue';
+import systemInfo from '../utils/browser';
+// import { getCompanyInfo } from './apis';
+// import eventHub from '../eventHub';
 export default {
   name: 'app',
-  // data() {
-  //   return {
-  //     transitionName: 'fade',
-  //   };
-  // },
+  data() {
+    return {
+      isApp: !systemInfo.IsPC,
+    };
+  },
   components: {
     lcHeader,
     lcNav,
@@ -57,7 +61,10 @@ export default {
     bannerMain,
   },
   mounted() {
-    console.log(this);
+    // getCompanyInfo().then(info => {
+    //   eventHub.emit('companyInfo', info);
+    // });
+    // console.log(this);
   },
   // 接着在父组件内
   // watch $route 决定使用哪种过渡

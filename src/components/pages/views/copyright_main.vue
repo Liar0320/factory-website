@@ -3,7 +3,7 @@
     <div class="container text-left">
       Copyright 2002 - 2018 Jiaxing XC Washer Co., Limited | All Rights Reserved
       |
-      <router-link to="app/home" class="color999">首页</router-link>
+      <router-link to="app/home" class="color999">home</router-link>
       <lange-change class="fr"></lange-change>
     </div>
   </div>

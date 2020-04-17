@@ -12,15 +12,17 @@ import Vue from 'vue';
 import App from './index.vue';
 import router from './vendors/routes';
 import axios from './vendors/axios';
-import BMap from 'vue-baidu-map';
-Vue.use(BMap, { ak: 'y3Fa7dIgukWM3vWWo87vKMcwP5l0SUxL' });
+// import BMap from 'vue-baidu-map';
+// Vue.use(BMap, { ak: 'y3Fa7dIgukWM3vWWo87vKMcwP5l0SUxL' });
+
+import './mocks/cache';
 
 import AOSVUE from './vendors/aos';
 AOSVUE.install(Vue);
 
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import 'element-ui/lib/theme-chalk/display.css';
+// import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-ui/lib/theme-chalk/display.css';
 
 // import ElementLocale from 'element-ui/lib/locale'
 
@@ -37,8 +39,8 @@ import { utilsComponent, utilsDec } from './directives/index';
 utilsComponent.install(Vue);
 utilsDec.install(Vue);
 
-import { mockXHR } from './mocks';
-mockXHR();
+// import { mockXHR } from './mocks';
+// mockXHR();
 
 /**引入样式表 */
 import './assets/content/bootstrap.scss';
@@ -48,8 +50,10 @@ import './assets/content/app.scss';
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
 
-new Vue({
+var app = new Vue({
   router,
   i18n,
   render: h => h(App),
 }).$mount('#app');
+
+document.title = app.$t('companyInfo.name');

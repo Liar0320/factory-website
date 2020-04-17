@@ -2,7 +2,7 @@
  * @Author: lich
  * @Date: 2019-09-03 00:25:36
  * @Last Modified by: lich
- * @Last Modified time: 2019-09-04 13:57:14
+ * @Last Modified time: 2020-04-09 15:05:01
  * @Done:兼容性
  * 通过对AOS的理解 
  * AOS通过  window.MutationObserver ||
@@ -14,8 +14,9 @@
  *@TODO:transform下position：fixed失效
  */
 import AOS from 'aos';
-import 'aos/dist/aos.css'; // You can also use <link> for styles
+// import 'aos/dist/aos.css'; // You can also use <link> for styles
 AOS.init({
+  startEvent: 'DOMContentLoaded',
   // offset: 240, // offset (in px) from the original trigger point
 });
 // window.AOS = AOS;

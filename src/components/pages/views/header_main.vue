@@ -5,7 +5,7 @@
         <!-- 网站标志 -->
         <el-col :xs="24" :sm="16" :md="10" :lg="12">
           <div class="header__logo fl">
-            <router-link to="/app/home" v-bind:title="$t('header.imgTitle')">
+            <router-link to="/app/home" v-bind:title="$t('companyInfo.name')">
               <img
                 width="100%"
                 height="100%"
@@ -33,7 +33,7 @@
                   class="header__search__input"
                   type="text"
                   name="key"
-                  v-model="filter"
+                  v-model.lazy="filter"
                   @change="routerGo(filter)"
                   v-bind:placeholder="$t('tools.placeholder')"
                 />
@@ -45,7 +45,10 @@
                 onfocus="if(this.value==defaultValue)this.value=''"
                 onblur="if(this.value=='')this.value=defaultValue"
               /> -->
-                <button class="btn-init header__search__btn">
+                <button
+                  class="btn-init header__search__btn"
+                  @click="routerGo(filter)"
+                >
                   <i class="iconfont icon-search fs26"></i>
                 </button>
               </div>
@@ -67,7 +70,8 @@
   </div>
 </template>
 <script>
-const logo = require('@/assets/images/logo.png');
+const logocn = require('@/assets/images/logo-cn.png');
+const logoen = require('@/assets/images/logo-en.png');
 const telIco = require('@/assets/images/icon.png');
 
 import { routerGo } from '../../services/products.service';
@@ -78,14 +82,22 @@ export default {
   mixins: [routerGo],
   data: function() {
     return {
-      logoUrl: logo,
+      logoUrl: logoen,
       telIco: telIco,
       filter: '',
     };
   },
+  mounted() {
+    this.logoUrl = this.$i18n.locale === 'en-US' ? logoen : logocn;
+  },
   methods: {
     toggleNavMenu() {
       eventHub.$emit('isShowNavMenu');
+    },
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.logoUrl = this.$i18n.locale === 'en-US' ? logoen : logocn;
     },
   },
 };

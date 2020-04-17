@@ -1,5 +1,5 @@
 <template>
-  <div class="langeChange">
+  <div class="langeChange color999">
     <el-switch
       v-model="lang"
       @change="langChange(lang)"
@@ -12,7 +12,6 @@
   </div>
 </template>
 <script>
-import { setCookie } from '@/utils';
 export default {
   data() {
     return {
@@ -21,18 +20,39 @@ export default {
   },
   methods: {
     langChange(lang) {
-      this.$i18n.locale = lang;
-      setCookie('i18n', lang);
+      let loading = this.$loading({
+        text: this.$t('tools.toggleLang'),
+      });
+
+      setTimeout(() => {
+        this.$i18n.locale = lang;
+        localStorage.setItem('i18n', lang);
+        loading.close();
+        loading.$destroy();
+      }, 500);
+      // location.reload();
     },
   },
   mounted() {
     this.lang = this.$i18n.locale;
   },
+  watch: {
+    '$i18n.locale'() {
+      this.lang = this.$i18n.locale;
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+@import 'assets/content/color.scss';
 .langeChange {
   display: inline-block;
   width: 140px;
+  .el-switch__label {
+    color: $Font04;
+  }
+  .el-switch__label.is-active {
+    color: #409eff;
+  }
 }
 </style>

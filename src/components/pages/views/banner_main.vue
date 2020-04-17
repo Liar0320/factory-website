@@ -2,7 +2,7 @@
   <div class="banner_main">
     <el-carousel height="420px;" v-event-system="moveDirection" ref="carousel">
       <el-carousel-item v-for="item in bannerUrls" :key="item">
-        <el-image :src="item" :fit="'fill'" lazy>
+        <el-image :src="item" :fit="'fill'">
           <div slot="placeholder" class="image-slot">
             加载中<span class="dot">...</span>
           </div>
